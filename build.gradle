@@ -17,9 +17,18 @@
  * under the License.
  */
 
-apply plugin: 'idea'
-apply plugin: 'eclipse'
-apply plugin: 'groovy'
+plugins {
+  id 'groovy'
+  id 'eclipse'
+  id 'idea'
+  id 'com.bmuschko.nexus' version '2.3.1'
+}
+
+group = 'org.elasticsearch.gradle'
+version = '1.0.0-SNAPSHOT'
+
+sourceCompatibility = 1.7
+targetCompatibility = 1.7
 
 repositories {
   mavenCentral()
@@ -29,3 +38,27 @@ dependencies {
   compile localGroovy()
   compile gradleApi()
 }
+
+modifyPom {
+  project {
+    name 'Gradle Project Attachment plugin'    
+    description = 'Gradle plugin to join multi-project projects together'
+    url 'https://github.com/elastic/gradle-project-attachment-plugin'
+    inceptionYear '2015'
+
+    scm {
+      url 'https://github.com/elastic/gradle-project-attachment-plugin'
+      connection 'scm:https://elastic@github.com/elastic/gradle-project-attachment-plugin.git'
+      developerConnection 'scm:git://github.com/elastic/gradle-project-attachment-plugin.git'
+    }
+
+    licenses {
+      license {
+        name 'The Apache Software License, Version 2.0'
+        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+        distribution 'repo'
+      }
+    }
+  }
+}
+

@@ -31,7 +31,7 @@ class AttachProjectTask extends DefaultTask {
     String projectName
 
     // file system location of the project being attached
-    File projectLocation
+    File projectPath
 
     @Option(option = 'name',
             description = 'Name of the project being attached'
@@ -40,15 +40,15 @@ class AttachProjectTask extends DefaultTask {
         projectName = name
     }
 
-    @Option(option = 'location',
-            description = 'Location of the project being attached'
+    @Option(option = 'path',
+            description = 'Path to the project being attached'
     )
-    void setProjectLocation(String path) {
-        File location = new File(path)
-        if (location.exists() == false || location.isDirectory() == false) {
+    void setProjectPath(String pathStr) {
+        File path = new File(pathStr)
+        if (path.exists() == false || path.isDirectory() == false) {
             throw new IllegalArgumentException("Location ${path} is not a valid directory")
         }
-        projectLocation = location
+        projectPath = path
     }
 
     @TaskAction
@@ -56,13 +56,13 @@ class AttachProjectTask extends DefaultTask {
         if (projectName == null) {
             throw new IllegalArgumentException('Must specify --name to attach a project')
         }
-        if (projectLocation == null) {
-            throw new IllegalArgumentException('Must specify --location to attach a project')
+        if (projectPath == null) {
+            throw new IllegalArgumentException('Must specify --path to attach a project')
         }
         File attachmentFile = new File(project.projectDir, ProjectAttachmentPlugin.ATTACHMENT_PREFIX + projectName)
         if (attachmentFile.exists()) {
             println("Overwriting existing attachment to ${attachmentFile.getText('UTF-8').trim()}")
         }
-        attachmentFile.setText(projectLocation.absolutePath, 'UTF-8')
+        attachmentFile.setText(projectPath.absolutePath, 'UTF-8')
     }
 }
