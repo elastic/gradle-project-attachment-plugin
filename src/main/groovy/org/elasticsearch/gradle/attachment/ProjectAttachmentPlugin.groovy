@@ -44,13 +44,11 @@ class ProjectAttachmentPlugin implements Plugin<Project> {
         project.ext.attachments = attachments
 
         // add projectsPrefix property so projects can do project dependencies
-        Set<Project> attachedProjects = new HashSet<>()
         for (String attachment : attachments) {
             String name = ":${attachment}"
-            project.project(name).allprojects {
+            project.configure(project.subprojects.findAll { it.path.startsWith(name) }) {
                 ext.projectsPrefix = name
             }
-            attachedProjects.addAll(project.project(name).allprojects)
         }
 
         project.tasks.create(
